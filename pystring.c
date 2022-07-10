@@ -47,7 +47,7 @@ void removeElement(char* string, char to_remove){
         if(found){
             if (string[j] == '\0'){
                 string[i] = '\0';
-                string = realloc(string, strlen(string)*sizeof(char));
+                string = realloc(string, strlen(string)*sizeof(char) +1);
             }
             else{string[i] = string[j];
             }
