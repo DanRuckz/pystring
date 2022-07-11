@@ -1,5 +1,93 @@
 #include "pystring.h"
 
+static void replace(struct pystring *this, char* replace_this, char* replace_with){
+    enum state{init, change, letter, end};
+    const int MAX_STRING = 2048;
+    bool sequence = false;
+    int sequence_start;
+    enum state sequence_location[MAX_STRING];
+    unsigned int letter_difference;
+    //initialize sequence location array
+    memset(sequence_location, 0, sizeof(enum state) * MAX_STRING);
+
+    for (int i=0;i<strlen(this->string);i++){
+        if(this->string[i] == replace_this[0]){
+            sequence = true;
+            sequence_start = i;
+        }
+
+        for(int j=0;j<strlen(replace_this);j++){
+            if(this->string[i+j] != replace_this[j]){
+                sequence = false;
+                sequence_start = -1;
+                break;
+            }
+        }
+
+        if(sequence){
+            sequence_location[i] = change;
+            sequence = false;
+        }
+        
+            /*if(strlen(replace_this) < strlen(replace_with)){
+                letter_difference = strlen(replace_with) - strlen(replace_this);
+                //implement add letter function
+                for (int j=0;j<strlen(this->string)+letter_difference+1;j++){
+                    if(j<sequence_start){
+                        sequence_start = letter;
+                    }
+                    if(j==strlen(this->string)+letter_difference){
+                    sequence_location[j] = end;
+                    break;
+                    }
+                    else if(j>=sequence_start && j<strlen(replace_with)){
+                        sequence_location[j] = empty;
+                    }
+                    else if(j>=sequence_start+strlen(replace_with) && j<=strlen(this->string)+letter_difference){
+                        sequence_location[j] = letter;
+                    }
+                }
+                
+                //for(int j=sequence_start;j<strlen(replace_with);j++){
+                //    sequence_location[j] = empty;
+                //}
+            }
+
+            else if(strlen(replace_this) > strlen(replace_with)){
+                letter_difference = strlen(replace_this) - strlen(replace_with);
+                //implement remove letter
+                puts("remove");
+            }
+            else{
+                letter_difference = 0;
+                //no need to change the allocation, only the letters
+                puts("equal");
+            }
+            for(int j=0;j<MAX_STRING;j++){
+                if(sequence_location[j] != end){
+                printf("%d", sequence_location[j]);
+                }
+                else{
+                    printf("%d", sequence_location[j]);
+                    puts("");
+                    break;
+                }
+            }
+            sequence = false;
+            */
+    }
+    for(int j=0;j<MAX_STRING;j++){
+        if(sequence_location[j] != end){
+            printf("%d", sequence_location[j]);
+        }
+        else{
+            printf("%d", sequence_location[j]);
+            puts("");
+            break;
+        }
+    }
+}
+
 static void strip(struct pystring *this,char* strip_operand){
     int i=0;
     int j=0;
@@ -32,7 +120,7 @@ static struct pystring create(char* string){
     char* stralloc;
     stralloc = malloc(strlen(string)*sizeof(char)+1);
     strcpy(stralloc,string);
-    return (struct pystring){.string=stralloc, .capitalize=&capitalize, .strip=&strip};
+    return (struct pystring){.string=stralloc, .capitalize=&capitalize, .strip=&strip, .replace=&replace};
 }
 const struct pystringClass pystring={.create=&create};
 
