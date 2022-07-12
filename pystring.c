@@ -28,26 +28,26 @@ static void replace(struct pystring *this, char* replace_this, char* replace_wit
             sequence_location[i] = change;
             sequence = false;
         }
-        
-            /*if(strlen(replace_this) < strlen(replace_with)){
-                letter_difference = strlen(replace_with) - strlen(replace_this);
-                //implement add letter function
-                for (int j=0;j<strlen(this->string)+letter_difference+1;j++){
-                    if(j<sequence_start){
-                        sequence_start = letter;
-                    }
-                    if(j==strlen(this->string)+letter_difference){
-                    sequence_location[j] = end;
-                    break;
-                    }
-                    else if(j>=sequence_start && j<strlen(replace_with)){
-                        sequence_location[j] = empty;
-                    }
-                    else if(j>=sequence_start+strlen(replace_with) && j<=strlen(this->string)+letter_difference){
-                        sequence_location[j] = letter;
-                    }
+    }
+
+    if(strlen(replace_this) < strlen(replace_with)){
+        letter_difference = strlen(replace_with) - strlen(replace_this);
+        //implement add letter function
+        for (int j=0;j<strlen(this->string)+letter_difference+1;j++){
+            if(j<sequence_start){
+                sequence_start = letter;
+            }
+            if(j==strlen(this->string)+letter_difference){
+                sequence_location[j] = end;
+                break;
                 }
-                
+            else if(j>=sequence_start && j<strlen(replace_with)){
+                sequence_location[j] = empty;
+            }
+            else if(j>=sequence_start+strlen(replace_with) && j<=strlen(this->string)+letter_difference){
+                sequence_location[j] = letter;
+            }
+        } 
                 //for(int j=sequence_start;j<strlen(replace_with);j++){
                 //    sequence_location[j] = empty;
                 //}
@@ -63,6 +63,7 @@ static void replace(struct pystring *this, char* replace_this, char* replace_wit
                 //no need to change the allocation, only the letters
                 puts("equal");
             }
+
             for(int j=0;j<MAX_STRING;j++){
                 if(sequence_location[j] != end){
                 printf("%d", sequence_location[j]);
@@ -72,10 +73,8 @@ static void replace(struct pystring *this, char* replace_this, char* replace_wit
                     puts("");
                     break;
                 }
-            }
-            sequence = false;
-            */
-    }
+            }            
+
     for(int j=0;j<MAX_STRING;j++){
         if(sequence_location[j] != end){
             printf("%d", sequence_location[j]);
