@@ -2,8 +2,9 @@
 
 int main(){
 
-    struct pystring mystring = pystring.create("abcdab\n");
-    mystring.replace(&mystring, "ab", "ggg");
+    struct pystring mystring = pystring.create("ab\n");
+    mystring.replace(&mystring, "a", "abcdab\n");
+    //gggcdggg\n\0
     //mystring.capitalize(&mystring);
     //mystring.strip(&mystring,"abc");
 
