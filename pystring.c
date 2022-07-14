@@ -61,7 +61,8 @@ static void replace(struct pystring *this, char* replace_this, char* replace_wit
             i+=1;
         }
     }
-    
+    i=0,j=0;
+
     for(int i =0;i<MAX_STRING;i++){
         printf("%d",sequence_location[i]);
     }
