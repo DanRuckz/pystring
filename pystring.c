@@ -3,6 +3,7 @@
 static void replace(struct pystring *this, char* replace_this, char* replace_with){
     enum state{init, change, letter, end};
     const int MAX_STRING = 2048;
+    char string_temp[MAX_STRING];
     bool sequence = false;
     int sequence_start;
     enum state sequence_location[MAX_STRING];
@@ -36,7 +37,7 @@ static void replace(struct pystring *this, char* replace_this, char* replace_wit
     }
     unsigned int jump = strlen(replace_this);
     unsigned int jump_counter =0;
-    unsigned int i=0,j=0;
+    unsigned int i=0,j=0,l=0;
     size_delta = ((strlen(replace_with)+1) - (strlen(replace_this)+1))* numberof_sequences;
     changed_delta = ((strlen(replace_with)+1) - (strlen(replace_this)+1));
     current_size = strlen(this->string)+1 *sizeof(char);
@@ -61,7 +62,28 @@ static void replace(struct pystring *this, char* replace_this, char* replace_wit
             i+=1;
         }
     }
-    i=0,j=0;
+    i=0,j=0,l=0;
+    /*while(true){
+        if(sequence_location[i] == init){
+            string_temp[j] = this->string[l];
+            j+=1;
+            l+=1;
+        }
+        else if(sequence_location[i] == change){
+            for(int n=0;n<strlen(replace_with);n++){
+                string_temp[j] = replace_with[n];
+                j+=1;
+            }
+            l+=jump;
+            i+=1;
+        }
+        else if(sequence_location[i] == end){
+            string_temp[j] = '\0';
+            break;
+        }
+    }
+    */
+i=0;j=0;
 
     for(int i =0;i<MAX_STRING;i++){
         printf("%d",sequence_location[i]);
