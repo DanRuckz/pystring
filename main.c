@@ -2,10 +2,8 @@
 
 int main(){
 
-    struct pystring mystring = pystring.create("some_string_with_substring\n");
-    mystring.replace(&mystring, "substring", "mellon");
-    mystring.capitalize(&mystring);
-    mystring.strip(&mystring, "_");
-    printf("%s", mystring.string);
+    Pystring mystring = pystring.create("123aA09azAZ");
+    //printf(alnum ? "true\n" : "false\n");
+
     return 0;
 }
