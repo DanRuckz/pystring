@@ -2,8 +2,9 @@
 
 int main(){
 
-    Pystring mystring = pystring.create("123aA09azAZ");
-    //printf(alnum ? "true\n" : "false\n");
-
+    struct pystring mystring = pystring.create("sasaaaasasa");
+    mystring.replace(&mystring, "a", "AAA");
+    mystring.casefold(&mystring);
+    printf("%s\n", mystring.string);
     return 0;
 }

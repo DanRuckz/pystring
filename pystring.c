@@ -1,5 +1,5 @@
 #include "pystring.h"
-//REPLACE FUNC
+
 static void replace(Pystring *this, char* replace_this, char* replace_with){
     enum state{init, change, end};
     const int MAX_STRING = 2048;
@@ -10,6 +10,7 @@ static void replace(Pystring *this, char* replace_this, char* replace_with){
     unsigned int size_delta, changed_delta, numberof_sequences=0, current_size, new_size;
     if(strlen(replace_with) == 0){
         for(int i=0;i<strlen(replace_this);i++){
+            puts("removing\n");
             removeElement(this->string, replace_this[i]);
         }
         return;
@@ -68,9 +69,10 @@ static void replace(Pystring *this, char* replace_this, char* replace_with){
             i+=1;
         }
     }
-
-    i=0,j=0,l=0,n=0;
     
+    i=0,j=0,l=0,n=0;
+
+
     char* string_temp = malloc(new_size*sizeof(char));
     while(true){
         if(sequence_location[i] == init){
@@ -86,6 +88,7 @@ static void replace(Pystring *this, char* replace_this, char* replace_with){
             n+=1;
             if(n == strlen(replace_with)){
                 l+=jump;
+                n=0;
             }
         }
         else if(sequence_location[i] == end){
@@ -97,8 +100,8 @@ static void replace(Pystring *this, char* replace_this, char* replace_with){
     i=0;j=0;
     this->string = realloc(this->string,new_size*sizeof(char));
     memcpy(this->string,string_temp,new_size);
+    free(string_temp);
 }
-//END REPLACE FUNC
 
 static void strip(Pystring *this,char* strip_operand){
     int i=0;
@@ -132,10 +135,6 @@ static void casefold(Pystring *this){
     }
 }
 
-static unsigned int find(Pystring *this){
-
-}
-
 static bool isalphanumeric(Pystring *this){
     bool alnum = false;
     for(int i=0;i<strlen(this->string);i++){
@@ -149,9 +148,6 @@ static bool isalphanumeric(Pystring *this){
     return alnum;
 }
 
-static void init(Pystring *this){
-}
-
 static Pystring create(char* string){
     if((strlen(string) >2048)){
         printf("the length is: %ld and it's too long\n", strlen(string));
@@ -160,12 +156,11 @@ static Pystring create(char* string){
     char* stralloc;
     stralloc = malloc(strlen(string)*sizeof(char)+1);
     strcpy(stralloc,string);
-    
-    return (Pystring){.string=stralloc, .capitalize=&capitalize, .strip=&strip, .replace=&replace, .casefold=&casefold, .find=&find, .isalphanumeric=&isalphanumeric};
+    return (Pystring){.string=stralloc, .capitalize=&capitalize, .strip=&strip, .replace=&replace, .casefold=&casefold, .isalphanumeric=&isalphanumeric};
 }
 const struct pystringClass pystring={.create=&create};
 
-static void removeElement(char* string, char to_remove){
+void removeElement(char* string, char to_remove){
     unsigned int i=0;
     unsigned int j=i+1;
     bool found = false;
