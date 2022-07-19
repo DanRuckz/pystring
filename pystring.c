@@ -10,7 +10,6 @@ static void replace(Pystring *this, char* replace_this, char* replace_with){
     unsigned int size_delta, changed_delta, numberof_sequences=0, current_size, new_size;
     if(strlen(replace_with) == 0){
         for(int i=0;i<strlen(replace_this);i++){
-            puts("removing\n");
             removeElement(this->string, replace_this[i]);
         }
         return;
@@ -103,6 +102,8 @@ static void replace(Pystring *this, char* replace_this, char* replace_with){
     free(string_temp);
 }
 
+
+
 static void strip(Pystring *this,char* strip_operand){
     int i=0;
     int j=0;
@@ -119,33 +120,131 @@ static void strip(Pystring *this,char* strip_operand){
     }
 }
 
-static void capitalize(Pystring *this){
+static void capitalize(char* string){
     char upper;
     char* temp;
-    if (this->string[0] > 0x60 && this->string[0] < 0x7b) {
-        this->string[0] = this->string[0] - 0x20;
+    if (string[0] > 0x60 && string[0] < 0x7b) {
+        string[0] = string[0] - 0x20;
     }
 }
 
-static void casefold(Pystring *this){
-    for(int i = 0;i<strlen(this->string);i++){
-        if(this->string[i] > 0x40 && this->string[i] < 0x5B){
-            this->string[i] = this->string[i] + 0x20;
+static void casefold(char* string){
+    for(int i = 0;i<strlen(string);i++){
+        if(string[i] > 0x40 && string[i] < 0x5B){
+            string[i] = string[i] + 0x20;
         }
     }
 }
 
-static bool isalphanumeric(Pystring *this){
-    bool alnum = false;
-    for(int i=0;i<strlen(this->string);i++){
-        if((this->string[i] >0x2F && this->string[i] < 0x3A) || (this->string[i] >0x40 && this->string[i] < 0x5B) || (this->string[i] > 0x60 && this->string[i] < 0x7B)){
-            alnum = true;
+static bool isalnum(char* string){
+    for(int i=0;i<strlen(string);i++){
+        if((string[i] >0x2F && string[i] < 0x3A) || (string[i] >0x40 && string[i] < 0x5B) || (string[i] > 0x60 && string[i] < 0x7B)){
         }
-        else{
+        else{return false;}
+    }
+    return true;
+}
+
+static bool isalpha(char* string){
+    for(int i=0;i<strlen(string);i++){
+        if((string[i] >0x40 && string[i] < 0x5B) || (string[i] > 0x60 && string[i] < 0x7B)){
+        }
+        else{return false;}
+    }
+    return true;
+}
+
+static bool isascii(char* string){
+    for (int i=0;i<strlen(string);i++){
+        if(string[i] > 0x7F && string[i] < 0x0){
             return false;
         }
     }
-    return alnum;
+    return true;
+}
+
+static bool islower(char* string){
+    for(int i=0;i<strlen(string);i++){
+        if(string[i] > 0x40 && string[i] < 0x5B){
+            return false;
+        }
+    }
+    return true;
+}
+
+static bool isdecimal(char* string){
+    for(int i=0;i<strlen(string);i++){
+        if(string[i] <- 0x2F || string[i] >= 0x3A){
+            return false;
+        }
+    }
+    return true;
+}
+
+static bool isidentifier(char* string){
+    if(string[0] > 0x2F && string[0] <0x3A){
+        return false;
+    }
+    for(int i=0;i<strlen(string);i++){
+        if((string[i] >0x2F && string[i] < 0x3A) || (string[i] >0x40 && string[i] < 0x5B) || (string[i] > 0x60 && string[i] < 0x7B)
+        || string[i] == 0x5F){
+        }
+        else{return false;}
+    }
+    return true;
+}
+static bool isspace(char* string){
+    if(strlen(string) == 0){
+        return false;
+    }
+    for(int i=0;i<strlen(string);i++){
+        if(string[i] != 0x20){
+            return false;
+        }
+    }
+    return true;
+}
+
+static bool istitle(char* string){
+    /*
+    to pass:
+    first letter has to be either uppercase or number/sign
+    if a letter was an uppercase, the next one has to be a number or a sign or a lowercase (not upper)
+    if a letter was lowercase the next has to be another lowercase or a number or a sign (not upper)
+    if a letter was a number or a sign(not alpha) the next one has to be a number or an uppercase (not lower)
+    */
+
+    if(string[0] > 0x60 && string[0] < 0x7B){
+        return false;
+    }
+
+    for(int i=1;i<strlen(string);i++){
+        char* current = string[i];
+        char* previous = string[i-1];
+
+        if(isupper(string) && isupper(current)){
+            printf("%d\n", i);
+            return false;
+        }
+        if(islower(previous) && isupper(current)){
+            printf("%d\n", i);
+            return false;
+        }
+        if(!isalpha(previous) && islower(current)){
+            printf("%d\n", i);
+            return false;
+        }
+    }
+    return true;
+}
+
+static bool isupper(char* string){
+    for(int i=0;i<strlen(string);i++){
+        if(string[i] > 0x60 && string[i] < 0x7B){
+            return false;
+        }
+    }
+    return true;
 }
 
 static Pystring create(char* string){
@@ -156,7 +255,9 @@ static Pystring create(char* string){
     char* stralloc;
     stralloc = malloc(strlen(string)*sizeof(char)+1);
     strcpy(stralloc,string);
-    return (Pystring){.string=stralloc, .capitalize=&capitalize, .strip=&strip, .replace=&replace, .casefold=&casefold, .isalphanumeric=&isalphanumeric};
+    return (Pystring){.string=stralloc, .capitalize=&capitalize, .strip=&strip, .replace=&replace, .casefold=&casefold, .isalnum=&isalnum,
+    .isalpha=&isalpha, .isascii=&isascii, .islower=&islower, .isdecimal=&isdecimal, .isidentifier=&isidentifier, .isspace=&isspace, .istitle=&istitle,
+    .isupper=&isupper};
 }
 const struct pystringClass pystring={.create=&create};
 
