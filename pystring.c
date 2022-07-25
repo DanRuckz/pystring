@@ -236,6 +236,7 @@ static bool istitle(Pystring *this){
     if a letter was lowercase the next has to be another lowercase or a number or a sign (not upper)
     if a letter was a number or a sign(not alpha) the next one has to be a number or an uppercase (not lower)
     */
+    
     if(this->string[0] > 0x60 && this->string[0] < 0x7B){
         return false;
     }
@@ -254,13 +255,17 @@ static bool istitle(Pystring *this){
         if(!__private_isalpha(previous) && __private_islower(current)){
             return false;
         }
-        
     }
     free(previous);
     free(current);
     return true;
 }
 
+static void title(Pystring *this){
+    /*
+    
+    */
+}
 
 static void delete(Pystring *this){
     free(this->string);

@@ -19,9 +19,10 @@ struct pystring{
     bool (*istitle)(struct pystring *this);
     bool (*isupper)(struct pystring *this);
     void (*delete)(struct pystring *this);
+    void (*title)(struct pystring *this);
 };
 extern const struct pystringClass{
-    struct pystring (*create)(char* string);
+    struct pystring (*create)(char* string)
 } pystring;
 typedef struct pystring Pystring;
 static void __private_removeElement(char* string, char to_remove);
