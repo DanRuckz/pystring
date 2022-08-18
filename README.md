@@ -1,5 +1,5 @@
 # pystring
-An attepmt to implement a python like string formation in C
+An attepmt to implement a python like string functionallity in C
 To use:
 Add pystring.h and pystring.c into your code
 
