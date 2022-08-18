@@ -421,13 +421,14 @@ static void swapcase(Pystring *this){
 }
 
 static void zfill(Pystring *this, int maxto_fill){
-    char temp[2048];
-    unsigned int numof_zeros = maxto_fill - strlen(this->string);
+    char temp[2048] ={0};
+    int numof_zeros = maxto_fill - strlen(this->string);
     if(strlen(this->string) >= maxto_fill || maxto_fill <1){
         return;
         }
     memcpy(temp,this->string,strlen(this->string)+1);
-    this->string = realloc(this->string, (strlen(this->string) + numof_zeros + 1)*sizeof(char));
+    int fullsize = (strlen(this->string) + numof_zeros +1);
+    this->string = realloc(this->string, fullsize*sizeof(char)*2);
     for(int i=0;i<strlen(this->string) + numof_zeros;i++){
         if(i<numof_zeros){
             this->string[i] = '0';
@@ -436,6 +437,7 @@ static void zfill(Pystring *this, int maxto_fill){
             this->string[i] = temp[i-numof_zeros];
         }
     }
+    this->string[strlen(this->string)] = '\0';
 }
 
 static void center(Pystring *this,unsigned int numof_max_chars, char padding){
@@ -470,6 +472,16 @@ static void center(Pystring *this,unsigned int numof_max_chars, char padding){
     }
 }
 
+static void ljust(Pystring *this, int max_tofill){
+    if(max_tofill <= strlen(this->string)){
+        return;
+    }
+    char temp[2048];
+    memcpy(temp,this->string,strlen(this->string)+1);
+    this->string = realloc(this->string, (max_tofill+1)*sizeof(char));
+
+}
+
 static void delete(Pystring *this){
     free(this->string);
 }
@@ -486,7 +498,7 @@ static Pystring create(char* string){
     return (Pystring){.string=stralloc, .capitalize=&capitalize, .strip=&strip, .replace=&replace, .lower=&lower, .upper=&upper, .isalnum=&isalnum,
     .isalpha=&isalpha, .isascii=&isascii, .islower=&islower, .isdecimal=&isdecimal, .isidentifier=&isidentifier, .isspace=&isspace, .istitle=&istitle,
     .isupper=&isupper, .delete=&delete, .title=&title, .count=&count, .swapcase=&swapcase, .find=&find, .find_windex=&find_windex, .startswith=&startswith,
-    .startswith_windex=&startswith_windex, .zfill=&zfill, .center=&center};
+    .startswith_windex=&startswith_windex, .zfill=&zfill, .center=&center, .ljust=&ljust};
 }
 const struct pystringClass pystring={.create=&create};
 

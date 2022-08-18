@@ -29,6 +29,7 @@ struct pystring{
     unsigned int (*find_windex)(struct pystring *this, char* substr, unsigned int __start, unsigned int __end);
     bool (*startswith)(struct pystring *this, char* substr);
     bool (*startswith_windex)(struct pystring* this, char* substr, unsigned int __start, unsigned int __end);
+    void (*ljust)(struct pystring *this, int max_tofill);
     void (*zfill)(struct pystring* this, int max_tofill);
 };
 extern const struct pystringClass{
